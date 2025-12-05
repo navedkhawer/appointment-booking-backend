@@ -46,8 +46,8 @@ async def login(creds: LoginRequest, response: Response):
         key="refresh_token",
         value=raw_refresh_token,
         httponly=True,       # JavaScript cannot access this
-        secure=False,        # Set to True in Production (HTTPS)
-        samesite="lax",      # Protects against CSRF
+        secure=True,        # Set to True in Production (HTTPS)
+        samesite="none",      # Protects against CSRF
         path="/",            # Available for all paths
         max_age=7 * 24 * 60 * 60 
     )

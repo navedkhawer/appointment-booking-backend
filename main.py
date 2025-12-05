@@ -15,6 +15,8 @@ origins = [
     "http://localhost:3001", # Admin Panel
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
+    "https://helsemed-backend.onrender.com",
+    "https://helse-frontend.vercel.app" 
 ]
 
 app.add_middleware(
