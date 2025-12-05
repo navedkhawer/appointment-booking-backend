@@ -18,7 +18,6 @@ origins = [
     "http://127.0.0.1:3001",
     "https://helse-admin.vercel.app",
     "https://helse-frontend.vercel.app",
-    "https://appointment-booking-backend-1-ir34.onrender.com"
 ]
 
 app.add_middleware(
