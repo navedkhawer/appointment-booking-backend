@@ -1,29 +1,30 @@
 import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-# Correct Imports: Use 'app.' not 'backend.app.'
+
+# Correct Imports
 from app.routes import appointments, patients, stats, auth, ai, schedule, notifications
 from app.database import client
-# Correct path for the watcher: it is in services, not routes
 from app.services.notification import watch_appointments
 
 app = FastAPI(title="MediCare Connect API", version="1.0.0")
 
-# --- FIX CORS ---
+# --- CORS CONFIGURATION ---
+# Must match the exact domains of your frontend/admin apps (No trailing slashes)
 origins = [
-    "http://localhost:3000", # Patient App
-    "http://localhost:3001", # Admin Panel
+    "http://localhost:3000",
+    "http://localhost:3001",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
-    "https://appointment-booking-backend-1-ir34.onrender.com",
     "https://helse-admin.vercel.app",
-    "https://helse-frontend.vercel.app" 
+    "https://helse-frontend.vercel.app",
+    "https://appointment-booking-backend-1-ir34.onrender.com"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
+    allow_credentials=True, # Critical: Allows HttpOnly Cookies for Auth
     allow_methods=["*"],
     allow_headers=["*"],
 )

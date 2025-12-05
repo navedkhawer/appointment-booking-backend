@@ -42,12 +42,13 @@ async def login(creds: LoginRequest, response: Response):
     )
 
     # 5. Set RAW Refresh Token in HttpOnly Cookie
+    # CRITICAL: samesite="none" and secure=True are required for Cross-Domain (Vercel -> Render)
     response.set_cookie(
         key="refresh_token",
         value=raw_refresh_token,
         httponly=True,       # JavaScript cannot access this
-        secure=True,        # Set to True in Production (HTTPS)
-        samesite="none",      # Protects against CSRF
+        secure=True,         # Required for HTTPS (Production)
+        samesite="none",     # Required for Cross-Site requests
         path="/",            # Available for all paths
         max_age=7 * 24 * 60 * 60 
     )
@@ -87,7 +88,7 @@ async def refresh_token(request: Request, response: Response):
     stored_hash = user.get("refresh_token_hash")
     if not stored_hash or not verify_hash(old_refresh_token, stored_hash):
         # Possible reuse attack detected -> Clear cookie
-        response.delete_cookie("refresh_token", path="/")
+        response.delete_cookie("refresh_token", path="/", samesite="none", secure=True)
         raise HTTPException(status_code=401, detail="Invalid or reused token")
 
     # 5. TOKEN ROTATION: Generate NEW Tokens
@@ -103,13 +104,13 @@ async def refresh_token(request: Request, response: Response):
         {"$set": {"refresh_token_hash": new_refresh_hash}}
     )
 
-    # 8. Set NEW Cookie
+    # 8. Set NEW Cookie (Must match Login settings)
     response.set_cookie(
         key="refresh_token",
         value=new_refresh_token,
         httponly=True,
-        secure=False, 
-        samesite="lax",
+        secure=True,        # Updated to True
+        samesite="none",    # Updated to none
         path="/",
         max_age=7 * 24 * 60 * 60
     )
@@ -132,7 +133,7 @@ async def logout(request: Request, response: Response):
                 {"$unset": {"refresh_token_hash": ""}}
             )
     
-    # Remove Cookie
-    response.delete_cookie("refresh_token", path="/")
+    # Remove Cookie (Must match creation attributes to delete successfully)
+    response.delete_cookie("refresh_token", path="/", samesite="none", secure=True)
     
     return {"message": "Logged out successfully"}
