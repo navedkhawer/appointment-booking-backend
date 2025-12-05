@@ -15,7 +15,8 @@ origins = [
     "http://localhost:3001", # Admin Panel
     "http://127.0.0.1:3000",
     "http://127.0.0.1:3001",
-    "https://helsemed-backend.onrender.com",
+    "https://appointment-booking-backend-1-ir34.onrender.com",
+    "https://helse-admin.vercel.app",
     "https://helse-frontend.vercel.app" 
 ]
 
