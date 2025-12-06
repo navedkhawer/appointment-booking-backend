@@ -98,6 +98,7 @@ def send_confirmation_email(to_email: str, booking_id: str, patient_name: str, d
                 </div>
             </div>
 
+            <!-- Footer -->
             {EMAIL_FOOTER}
         </div>
     </body>
@@ -170,6 +171,7 @@ def send_admin_confirmation_email(booking_id: str, patient_name: str, patient_ph
                 </div>
             </div>
 
+            <!-- Footer -->
             {EMAIL_FOOTER}
         </div>
     </body>
