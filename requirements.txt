@@ -11,3 +11,4 @@ passlib[bcrypt]
 python-multipart
 boto3
 botocore
+argon2-cffi
